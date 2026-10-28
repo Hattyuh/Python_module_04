@@ -1,6 +1,7 @@
 import sys
 import typing
 
+
 def print_content(content: str) -> None:
     print(
         "---\n\n"
@@ -8,11 +9,10 @@ def print_content(content: str) -> None:
         "---"
     )
 
-
-def proccess_file(args: list[str]) -> int:
+def get_data(args: list[str]) -> str | None:
     if len(args) != 2:
         print("Usage: ft_ancient_text.py <file>")
-        return 1
+        return None
     print("=== Cyber Archives Recovery & Preservation ===")
     file: str = args[1]
     print(f"Accesing file {file}'")
@@ -22,29 +22,39 @@ def proccess_file(args: list[str]) -> int:
         print_content(content)
         fd.close()
         print(f"File '{file}' closed")
+        return content
     except (FileNotFoundError, PermissionError) as error:
         print(f"Error opening file '{file}': {error}")
+        return None
+    
+def transform_data(data: str) -> str:
     print("Transform data:")
-    content: = content.replace("\n", "#\n")
-    if content.endswith("\n") == False:
-        content += "#"
-    print_content(content)
-    file = input("Enter new file name (or empty): ")
+    if len(data) > 0 or len(data) == 1 and data[0] != "\n":
+        new_data: str = data.replace("\n", "#\n")
+        if new_data.endswith("\n") == False:
+            new_data += "#"
+    print_content(new_data)
+    return new_data
+
+def save_data(data: str) -> None:
+    file: str = input("Enter new file name (or empty): ")
     if file == "":
         print("Not saving data.")
-        return 0
+        return
     print(f"Saving data to '{file}'")
     try:
-        fd: typing.IO[str] = open(new_file, "w")
-        fd.write(content)
-        print_content(content)
+        fd: typing.IO[str] = open(file, "w")
+        fd.write(data)
+        print_content(data)
         fd.close()
         print(f"File '{file}' closed")
-    except (FileNotFoundError, PermissionError) as error:
-        print(f"Error opening file '{file}': {error}")
-    print(f"Data saved to '{file}'")
-    return 0
+        print(f"Data saved to '{file}'")
+    except (NotADirectoryError, FileNotFoundError, PermissionError) as error:
+        print(f"Error saving file '{file}': {error}")
 
 
 if __name__ == "__main__":
-    print(proccess_file(sys.argv)))
+    data: str | None = get_data(sys.argv)
+    if data is not None:
+        data = transform_data(data)
+        save_data(data)
