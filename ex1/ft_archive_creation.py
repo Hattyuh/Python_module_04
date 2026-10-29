@@ -9,6 +9,7 @@ def print_content(content: str) -> None:
         "---"
     )
 
+
 def get_data(args: list[str]) -> str | None:
     if len(args) != 2:
         print("Usage: ft_ancient_text.py <file>")
@@ -26,15 +27,19 @@ def get_data(args: list[str]) -> str | None:
     except (FileNotFoundError, PermissionError) as error:
         print(f"Error opening file '{file}': {error}")
         return None
-    
+
+
 def transform_data(data: str) -> str:
     print("Transform data:")
-    if len(data) > 0 or len(data) == 1 and data[0] != "\n":
-        new_data: str = data.replace("\n", "#\n")
-        if new_data.endswith("\n") == False:
-            new_data += "#"
+    if len(data) == 0:
+        print_content(data)
+        return data
+    new_data: str = data.replace("\n", "#\n")
+    if new_data.endswith("\n") is False:
+        new_data += "#"
     print_content(new_data)
     return new_data
+
 
 def save_data(data: str) -> None:
     file: str = input("Enter new file name (or empty): ")
