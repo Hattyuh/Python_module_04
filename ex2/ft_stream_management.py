@@ -3,28 +3,26 @@ import typing
 
 
 def print_content(content: str) -> None:
-    print(
-        "---\n\n"
-        f"{content}\n"
-        "---"
-    )
+    print(f"---\n\n{content}\n---")
 
 
 def get_data(args: list[str]) -> str | None:
     if len(args) != 2:
-        print("Usage: ft_ancient_text.py <file>")
+        print("Usage: ft_stream_management.py <file>")
         return None
     print("=== Cyber Archives Recovery & Preservation ===")
     file: str = args[1]
     print(f"Accesing file {file}'")
     try:
         fd: typing.IO[str] = open(file, "r")
-        content: str = fd.read()
-        print_content(content)
-        fd.close()
-        print(f"File '{file}' closed")
+        try:
+            content: str = fd.read()
+            print_content(content)
+        finally:
+            fd.close()
+            print(f"File '{file}' closed")
         return content
-    except (FileNotFoundError, PermissionError) as error:
+    except (OSError) as error:
         print(
             f"[STDERR] Error opening file '{file}': {error}",
             file=sys.stderr
@@ -56,12 +54,14 @@ def save_data(data: str) -> None:
     print(f"Saving data to '{file}'")
     try:
         fd: typing.IO[str] = open(file, "w")
-        fd.write(data)
-        print_content(data)
-        fd.close()
-        print(f"File '{file}' closed")
+        try:
+            fd.write(data)
+            print_content(data)
+        finally:
+            fd.close()
         print(f"Data saved to '{file}'")
-    except (NotADirectoryError, FileNotFoundError, PermissionError) as error:
+        print(f"File '{file}' closed")
+    except (OSError) as error:
         print(f"[STDERR] Error saving file '{file}': {error}", file=sys.stderr)
 
 
