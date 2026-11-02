@@ -32,4 +32,7 @@ if __name__ == "__main__":
     result: tuple[bool, str] = secure_archive("file", "r", "")
     print(result)
     print("\nUsing 'secure_archieve' to write previous content to a new file:")
-    print(secure_archive("new_file", "w", result[1]))
+    if result[0]:
+        print(secure_archive("new_file", "w", result[1]))
+    else:
+        print(f"Accessing precious file failed: {result[1]}")
