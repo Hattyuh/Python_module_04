@@ -3,9 +3,7 @@ import typing
 
 
 def print_content(content: str) -> None:
-    print(
-        f"---\n\n{content}\n---"
-    )
+    print(f"---\n\n{content}\n---")
 
 
 def get_data(args: list[str]) -> str | None:
@@ -52,10 +50,10 @@ def save_data(data: str) -> None:
         try:
             fd.write(data)
             print_content(data)
-            print(f"Data saved to '{file}'")
         finally:
             fd.close()
-            print(f"File '{file}' closed")
+        print(f"Data saved to '{file}'")
+        print(f"File '{file}' closed")
     except (OSError) as error:
         print(f"Error saving file '{file}': {error}")
 
