@@ -17,7 +17,7 @@ def read_file(args: list[str]) -> None:
         finally:
             fd.close()
             print(f"File '{file}' closed")
-    except (FileNotFoundError, PermissionError) as error:
+    except (OSError) as error:
         print(f"Error opening file '{file}': {error}")
 
 
