@@ -11,14 +11,12 @@ def read_file(args: list[str]) -> None:
     print(f"Accesing file {file}'")
     try:
         fd: typing.IO[str] = open(file, "r")
-        content: str = fd.read()
-        print(
-            "---\n\n"
-            f"{content}\n"
-            "---"
-        )
-        fd.close()
-        print(f"File '{file}' closed")
+        try:
+            content: str = fd.read()
+            print(f"---\n\n{content}\n---")
+        finally:
+            fd.close()
+            print(f"File '{file}' closed")
     except (FileNotFoundError, PermissionError) as error:
         print(f"Error opening file '{file}': {error}")
 
